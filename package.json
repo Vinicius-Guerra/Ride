@@ -4,14 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsnd --cls --rs src/server.ts"
+    "dev": "tsnd --cls --rs src/server.ts",
+    "test": "dotenv -e .env.test -- jest --verbose --runInBand",
+    "migrate:test": "dotenv -e .env.test -- npx prisma migrate dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "dotenv-cli": "^7.4.2",
+    "jest": "^29.7.0",
     "prisma": "^5.13.0",
+    "ts-jest": "^29.1.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5"
   },
