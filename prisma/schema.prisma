@@ -31,4 +31,56 @@ model Driver {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   Car         Car[]
+  Trip Trip[]
+}
+
+model Customer {
+  id Int @id @default(autoincrement())
+  email String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+  firstName String @db.VarChar(50)
+  lastName String @db.VarChar(50)
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
+  Trip Trip[]
+}
+
+model Trip {
+  id Int @id @default(autoincrement())
+  status TripStatus @default(IN_PROGRESS)
+  //location
+  source String
+  destination String
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
+  // FK
+  customerId Int
+  customer Customer @relation(fields: [customerId], references: [id])
+  driverId Int
+  driver Driver @relation(fields: [driverId], references: [id])
+  paymentId Int @unique
+  payment Payment @relation(fields: [paymentId], references: [id])
+}
+
+enum TripStatus {
+  IN_PROGRESS
+  COMPLETED
+  UPCOMING
+}
+
+model Payment {
+  id Int @id @default(autoincrement())
+  //
+  method PaymentMethod
+  //Armazenaremos  o valor monetario em centavos (INT)
+  amount Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
+  Trip Trip[]
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  CASH
 }

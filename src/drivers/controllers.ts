@@ -5,9 +5,9 @@ export const createDriverController = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const createdCar = await createDriverService({
+  const createdDriver = await createDriverService({
     ...req.body,
   });
 
-  return res.status(201).json(createdCar);
+  return res.status(201).json(createdDriver);
 };
