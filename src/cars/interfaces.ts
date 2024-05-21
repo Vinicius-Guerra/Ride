@@ -1,5 +1,6 @@
-import { Car } from "@prisma/client";
+// import { Car } from "@prisma/client";
+import { z } from "zod";
+import { carSchema } from "./schemas";
 
-type CarPayload = Omit<Car, "id">;
-
-export { Car, CarPayload };
+export type Car = z.infer<typeof carSchema>;
+export type CarPayload = Omit<Car, "id">;

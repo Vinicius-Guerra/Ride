@@ -39,6 +39,12 @@ export const retrieveCarService = async (carId: number): Promise<Car> => {
 };
 
 export const deleteCarService = async (carId: number) => {
+  // const car = await prisma.car.findUnique({ where: { id: carId } });
+
+  // if (!car) {
+  //   throw new Error("Car not found.");
+  // }
+
   await retrieveCarService(carId);
 
   await prisma.car.delete({ where: { id: carId } });
@@ -76,4 +82,5 @@ export const partialUpdateCarService = async (
   });
 
   return updatedCar;
+  // return { id: carId, ...payload };
 };

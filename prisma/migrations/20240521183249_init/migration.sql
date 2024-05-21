@@ -1,12 +1,12 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "Car" (
+    "id" SERIAL NOT NULL,
+    "model" VARCHAR(100) NOT NULL,
+    "licensePlate" TEXT NOT NULL,
+    "driverId" INTEGER NOT NULL,
 
-  - A unique constraint covering the columns `[driverId]` on the table `Car` will be added. If there are existing duplicate values, this will fail.
-  - Added the required column `driverId` to the `Car` table without a default value. This is not possible if the table is not empty.
-
-*/
--- AlterTable
-ALTER TABLE "Car" ADD COLUMN     "driverId" INTEGER NOT NULL;
+    CONSTRAINT "Car_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Driver" (
@@ -23,10 +23,13 @@ CREATE TABLE "Driver" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
+CREATE UNIQUE INDEX "Car_licensePlate_key" ON "Car"("licensePlate");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Car_driverId_key" ON "Car"("driverId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Driver_email_key" ON "Driver"("email");
 
 -- AddForeignKey
 ALTER TABLE "Car" ADD CONSTRAINT "Car_driverId_fkey" FOREIGN KEY ("driverId") REFERENCES "Driver"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

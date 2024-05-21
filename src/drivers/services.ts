@@ -4,7 +4,9 @@ import { ApiError } from "../errors/api.errors";
 import { Driver, DriverPayload, DriverResponse } from "./interfaces";
 import { driverResponseSchema } from "./schemas";
 
-export const createDriverService = async (payload: DriverPayload): Promise<DriverResponse> => {
+export const createDriverService = async (
+  payload: DriverPayload
+): Promise<DriverResponse> => {
   const driverWithDuplicatedEmail = await prisma.driver.findUnique({
     where: { email: payload.email },
   });

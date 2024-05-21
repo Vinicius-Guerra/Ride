@@ -1,46 +1,97 @@
+import { Driver } from "@prisma/client";
 import { prisma } from "../../../../prisma/database";
-import { create } from "../../services";
+import { createCarService } from "../../services";
 
 describe("Car service create unit tests", () => {
-    beforeEach(async () => {
-        await prisma.car.deleteMany();
-    })
+  let driver: Driver;
 
-    test("Should be able to create a Car", async () => {
-        const validTestCar = {
-            model: "corsa sedan",
-            licensePlate: "AAA-1234",
-        }
+  beforeAll(async () => {
+    const driverData = {
+      email: "something@mail.com",
+      password: "1234",
+      firstName: "Chrystian",
+      lastName: "Rodolfo",
+    };
 
-        const receivedValue  = await create(validTestCar);
+    driver = await prisma.driver.create({ data: driverData });
+  });
 
-        const expectedValue = {
-            id: expect.any(Number),
-            model: validTestCar.model,
-            licensePlate: validTestCar.licensePlate
-        }
+  beforeEach(async () => {
+    await prisma.car.deleteMany();
+  });
 
-        // VERIFICAR SE FOI CRIADO NO BANCO
-        expect(receivedValue).toEqual(expectedValue);
+  afterAll(async () => {
+    await prisma.car.deleteMany();
+    await prisma.driver.deleteMany();
+  });
 
-        const createdCar = await prisma.car.findUnique({ where: { id: receivedValue.id }});
+  test("Should be able to create a Car", async () => {
+    // SETUP
+    const validTestCar = {
+      model: "Corsa Sedan",
+      licensePlate: "AAA-1234",
+      driverId: driver.id,
+    };
 
-        expect(createdCar).toBeTruthy();
-    } )
+    const receivedValue = await createCarService(validTestCar);
 
-    test("Should throw an error if creating a Car with duplicated license plate", async () => {
-        const car1 = {
-            model: "corsa sedan",
-            licensePlate: "AAA-1234",
-        }
+    const expectedValue = {
+      id: expect.any(Number),
+      model: validTestCar.model,
+      licensePlate: validTestCar.licensePlate,
+      driverId: driver.id,
+    };
 
-        await prisma.car.create({ data: car1 });
+    expect(receivedValue).toEqual(expectedValue);
 
-        const carWithDuplicatedLicensePlate = {
-            model: "Gol",
-            licensePlate: "AAA-1234",
-        }
+    const createdCar = await prisma.car.findUnique({
+      where: { id: receivedValue.id },
+    });
 
-        await expect(create(carWithDuplicatedLicensePlate)).rejects.toThrow('License plate already used.')
-    } )
-})
+    expect(createdCar).toBeTruthy();
+  });
+
+  test("Should throw an error if creating a Car with duplicated license plate", async () => {
+    // SETUP
+    const car = {
+      model: "Corsa Sedan",
+      licensePlate: "AAA-1234",
+      driverId: driver.id,
+    };
+
+    await prisma.car.create({ data: car });
+
+    const carWithDuplicatedLicensePlate = {
+      model: "Gol",
+      licensePlate: car.licensePlate,
+      driverId: driver.id,
+    };
+
+    await expect(
+      createCarService(carWithDuplicatedLicensePlate)
+    ).rejects.toThrow("License plate already used.");
+  });
+
+  test("Should throw an error if creating a Car with duplicated driver id", async () => {
+    // SETUP
+    const car = {
+      model: "Corsa Sedan",
+      licensePlate: "AAA-1234",
+      driverId: driver.id,
+    };
+
+    await prisma.car.create({ data: car });
+
+    const carWithDuplicatedLicensePlate = {
+      model: "Gol",
+      licensePlate: "BBB-1234",
+      driverId: driver.id,
+    };
+
+    // await create(carWithDuplicatedLicensePlate);
+
+    await expect(
+      createCarService(carWithDuplicatedLicensePlate)
+    ).rejects.toThrow("This driver already have a car.");
+  });
+});
