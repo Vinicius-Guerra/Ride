@@ -6,6 +6,8 @@
 import type { Config } from "jest";
 
 const config: Config = {
+  displayName: "Kenzie Ride",
+
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
