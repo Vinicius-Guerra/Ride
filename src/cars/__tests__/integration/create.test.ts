@@ -1,39 +1,62 @@
 import { prisma } from "../../../../prisma/database";
 import supertest from "supertest";
-import { initApp } from "../../../app";
+import { app, initApp } from "../../../app";
+import { Driver } from "@prisma/client";
 
-
-describe("Car create integration tests", () => {
+describe("POST /drivers/:driverId/cars", () => {
   const request = supertest(initApp);
-  const endpoint = "/api/cars";
+  const endpointPrefix = "/api/drivers/";
+  const endpointSuffix = "/cars";
+
+  let driver: Driver;
+
+  beforeAll(async () => {
+    const driverData = {
+      email: "something@mail.com",
+      password: "1234",
+      firstName: "Chrystian",
+      lastName: "Rodolfo",
+    };
+
+    driver = await prisma.driver.create({ data: driverData });
+  });
 
   beforeEach(async () => {
     await prisma.car.deleteMany();
   });
 
+  afterAll(async () => {
+    await prisma.car.deleteMany();
+    await prisma.driver.deleteMany();
+  });
+
   test("Should be able to create a car", async () => {
+    // "/api/drivers/100/cars"
+    const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const validPayload = {
       model: "Corsa Sedan",
       licensePlate: "AAA-1234",
     };
 
     const response = await request.post(endpoint).send(validPayload);
+    // console.log(response);
 
     const expectedResponseBody = {
       id: expect.any(Number),
       model: validPayload.model,
       licensePlate: validPayload.licensePlate,
+      driverId: driver.id,
     };
 
-    expect(response.status).toBe(201);
     expect(response.body).toEqual(expectedResponseBody);
+    expect(response.status).toBe(201);
   });
 
   test("Should return an error if creating a car without required keys", async () => {
+    // SETUP
+    const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const invalidPayload = {};
     const response = await request.post(endpoint).send(invalidPayload);
-
-    expect(response.body.errors).toBeDefined();
 
     const requiredKeys = ["model", "licensePlate"];
     const receivedKeys = Object.keys(response.body.errors);
@@ -45,9 +68,12 @@ describe("Car create integration tests", () => {
   });
 
   test("Should return an error if creating a car with duplicated license plate", async () => {
+    // SETUP
+    const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const car1 = {
       model: "Corsa Sedan",
       licensePlate: "AAA-1234",
+      driverId: driver.id,
     };
     await prisma.car.create({ data: car1 });
 
@@ -70,6 +96,7 @@ describe("Car create integration tests", () => {
 
   test("Should return an error if creating a car with model field more than 100 characters", async () => {
     // SETUP
+    const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const invalidModelCar = {
       model:
         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
@@ -89,6 +116,8 @@ describe("Car create integration tests", () => {
   });
 
   test("Should return an error if creating a car with licensePlate field invalid format", async () => {
+    // SETUP
+    const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const invalidModelCar = {
       model: "Fusca",
       licensePlate: "BBBBBB-12345678",
@@ -109,5 +138,32 @@ describe("Car create integration tests", () => {
 
     expect(response.body).toEqual(expectedResponseBody);
     expect(response.statusCode).toBe(400);
+  });
+
+  test("Should return an error if creating a car with duplicated driver id", async () => {
+    // SETUP
+    const endpoint = endpointPrefix + driver.id + endpointSuffix;
+    const car1 = {
+      model: "Corsa Sedan",
+      licensePlate: "AAA-1234",
+      driverId: driver.id,
+    };
+    await prisma.car.create({ data: car1 });
+
+    const carWithDuplicatedLicensePlate = {
+      model: "Fusca",
+      licensePlate: "ZZZ-2222",
+    };
+
+    const response = await request
+      .post(endpoint)
+      .send(carWithDuplicatedLicensePlate);
+
+    const expectedResponseBody = {
+      error: "This driver already have a car.",
+    };
+
+    expect(response.body).toEqual(expectedResponseBody);
+    expect(response.statusCode).toBe(409);
   });
 });

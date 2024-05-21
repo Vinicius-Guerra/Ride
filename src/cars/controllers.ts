@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
-import { create } from "./services";
+import { createCarService } from "./services";
 
-export const createController = async (req: Request, res: Response): Promise<Response> => {
-  const createdCar = await create(req.body);
+export const createCarController = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const createdCar = await createCarService({
+    ...req.body,
+    driverId: Number(req.params.driverId),
+  });
 
   return res.status(201).json(createdCar);
 };

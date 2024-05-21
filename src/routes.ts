@@ -1,6 +1,7 @@
 import { Express } from "express";
-import { carRouter } from "./cars/routes";
+import { driverRouter } from "./drivers/routes";
 
 export const initRoutes = (app: Express) => {
-  app.use("/api/cars", carRouter);
+  //app.use("/api/cars", carRouter);
+  app.use("/api/drivers", driverRouter);
 };
