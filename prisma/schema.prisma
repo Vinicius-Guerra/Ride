@@ -14,7 +14,20 @@ datasource db {
 }
 
 model Car {
+  id           Int    @id @default(autoincrement())
+  model        String @db.VarChar(100)
+  licensePlate String @unique
+  driverId     Int    @unique
+  driver       Driver @relation(fields: [driverId], references: [id])
+}
+
+model Driver {
   id Int @id @default(autoincrement())
-  model String @db.VarChar(100)
-  licensePlate String @unique @db.VarChar(10)
+  email String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+  firstName String @db.VarChar(50)
+  dateOfBirth DateTime? @db.Date()
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Car Car[]
 }
