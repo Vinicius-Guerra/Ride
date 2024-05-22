@@ -1,13 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { prisma } from "../../prisma/database";
 import { ApiError } from "../errors/api.errors";
+import { ParamType } from "../@shared/interfaces";
 
-export const driverExists = async (
+export const driverExists = 
+(paramType: ParamType) =>
+async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { driverId } = req.params;
+  const { driverId } = paramType === ParamType.URL_PARAM ? req.params : req.body;
 
   const driver = await prisma.driver.findUnique({
     where: { id: Number(driverId) },

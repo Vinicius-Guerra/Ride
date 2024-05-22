@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { isBodyValid } from "../middlewares";
+import { isBodyValid } from "../@shared/middlewares";
 import { carPayloadSchema } from "../cars/schemas";
 import { createCarController } from "../cars/controllers";
 import { createDriverController } from "./controllers";

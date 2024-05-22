@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { isBodyValid } from "../middlewares";
+import { isBodyValid } from "../@shared/middlewares";
 import { createCustomerController } from "./controllers";
 import { customerPayloadSchema } from "./schemas";
 
