@@ -1,26 +1,18 @@
 import express from "express";
 import "express-async-errors";
 import { initRoutes } from "./routes";
-import { handleError } from "./@shared/errors/handle.errors";
-// import logger from "morgan";
-import { checkEnvVariables } from "./configs/checkEnvVariables";
-import { customMorganLogger } from "./configs/morgan.logger";
+import { initLoggers } from "./@shared/loggers";
+import { initErrorHandler } from "./@shared/errors";
 
 export const initApp = () => {
   const app = express();
-  // app.use(logger("dev"));
-  // app.use(logger("combined"));
-  app.use(customMorganLogger);
   app.use(express.json());
 
-  checkEnvVariables();
-
+  initLoggers(app);
   initRoutes(app);
-
-  app.use(handleError);
+  initErrorHandler(app);
 
   return app;
 };
 
-// export default app;
 export const app = initApp();
