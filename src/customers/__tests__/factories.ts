@@ -4,7 +4,7 @@ import { prisma } from "../../../prisma/database";
 import { hash } from "bcryptjs";
 import { CarFactory } from "../../cars/__tests__/factories";
 
-export class DriverFactory {
+export class CustomerFactory {
     static build = async (data: Partial<Prisma.DriverCreateInput> = {}) => {
         const now = Date.now();
 
@@ -18,13 +18,13 @@ export class DriverFactory {
     };
 
     static create = async (data: Partial<Prisma.DriverCreateInput> = {}) => {
-        const driverData = await DriverFactory.build(data);
+        const driverData = await CustomerFactory.build(data);
 
         return await prisma.driver.create({ data: driverData });
     };
 
-    static createWithCar = async (data: Partial<Prisma.DriverCreateInput> = {}) => {
-        const driverData = await DriverFactory.build(data);
+    static createWithCar = async (data: Partial<Prisma.DriverCreateInput>) => {
+        const driverData = await CustomerFactory.build(data);
         const driver = await prisma.driver.create({ data: driverData });
         await CarFactory.create(driver.id);
 
