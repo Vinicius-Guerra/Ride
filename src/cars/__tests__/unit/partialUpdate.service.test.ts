@@ -1,27 +1,15 @@
 import { Driver } from "@prisma/client";
 import { prisma } from "../../../../prisma/database";
 import { partialUpdateCarService } from "../../services";
+import { DriverFactory } from "../../../drivers/__tests__/factories";
 
 describe("Car service partial update unit tests", () => {
   let driver1: Driver;
   let driver2: Driver;
 
   beforeAll(async () => {
-    const driver1Data = {
-      email: "something@mail.com",
-      password: "1234",
-      firstName: "Chrystian",
-      lastName: "Rodolfo",
-    };
-    const driver2Data = {
-      email: "something2@mail.com",
-      password: "1234",
-      firstName: "Chrystian",
-      lastName: "Rodolfo",
-    };
-
-    driver1 = await prisma.driver.create({ data: driver1Data });
-    driver2 = await prisma.driver.create({ data: driver2Data });
+    driver1 = await DriverFactory.create();
+    driver2 = await DriverFactory.create();
   });
 
   beforeEach(async () => {

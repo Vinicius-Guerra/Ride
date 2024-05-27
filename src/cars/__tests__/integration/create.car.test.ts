@@ -4,7 +4,8 @@ import { app } from "../../../app";
 import { Driver } from "@prisma/client";
 import { sign } from "jsonwebtoken";
 import { DriverFactory } from "../../../drivers/__tests__/factories";
-import { TokenFactory } from "../../../session/factories";
+import { TokenFactory } from "../../../session/__tests__/factories";
+import { parsedEnv } from "../../../@shared/configs";
 
 describe("POST /drivers/:driverId/cars", () => {
   const request = supertest(app);
@@ -17,7 +18,6 @@ describe("POST /drivers/:driverId/cars", () => {
   let notDriverToken: string;
 
   beforeAll(async () => {
-
     driver = await DriverFactory.create();
     validDriverToken = TokenFactory.create(driver.id);
 
@@ -28,12 +28,11 @@ describe("POST /drivers/:driverId/cars", () => {
       {
         exp: Math.floor(Date.now() / 1000) - 60 * 60,
       },
-      process.env.JWT_SECRET as string,
+      parsedEnv.JWT_SECRET,
       {
         subject: driver.id.toString(),
       }
     );
-
   });
 
   beforeEach(async () => {
@@ -46,7 +45,6 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should be able to create a car", async () => {
-    // "/api/drivers/100/cars"
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const validPayload = {
       model: "Corsa Sedan",
@@ -70,7 +68,6 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should return an error if creating a car without required keys", async () => {
-    // SETUP
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const invalidPayload = {};
 
@@ -89,7 +86,6 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should return an error if creating a car with duplicated license plate", async () => {
-    // SETUP
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const car1 = {
       model: "Corsa Sedan",
@@ -117,7 +113,6 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should return an error if creating a car with model field more than 100 characters", async () => {
-    // SETUP
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const invalidModelCar = {
       model:
@@ -141,7 +136,6 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should return an error if creating a car with licensePlate field invalid format", async () => {
-    // SETUP
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const invalidModelCar = {
       model: "Fusca",
@@ -168,7 +162,6 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should return an error if creating a car with duplicated driver id", async () => {
-    // SETUP
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const car1 = {
       model: "Corsa Sedan",
@@ -196,7 +189,6 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should return an error if creating a car with non existing driver id", async () => {
-    // SETUP
     const endpoint = endpointPrefix + 10000 + endpointSuffix;
     const car = {
       model: "Corsa Sedan",
@@ -217,14 +209,7 @@ describe("POST /drivers/:driverId/cars", () => {
     expect(response.statusCode).toBe(404);
   });
 
-  /*
-  - [x] sem token
-  - [x] token com assinatura inválida
-  - [x] token expirado
-  - [x] token que não é do driver em questão
-  */
   test("Should return an error if creating a car without token", async () => {
-    // SETUP
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const car = {};
 
@@ -239,10 +224,9 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should return an error if creating a car with invalid signature token", async () => {
-    // SETUP
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
     const randomToken =
-      "invalidToken";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
     const car = {
       model: "Corsa Sedan",
@@ -264,7 +248,6 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should return an error if creating a car with expired token", async () => {
-    // SETUP
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
 
     const car = {
@@ -287,7 +270,6 @@ describe("POST /drivers/:driverId/cars", () => {
   });
 
   test("Should return an error if creating a car without associated driver token", async () => {
-    // SETUP
     const endpoint = endpointPrefix + driver.id + endpointSuffix;
 
     const car = {

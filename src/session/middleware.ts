@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { prisma } from "../../prisma/database";
 import { ApiError } from "../@shared/errors/api.errors";
 import { verify } from "jsonwebtoken";
+import { parsedEnv } from "../@shared/configs";
 
 export const isAuthenticated = async (
   req: Request,
@@ -17,7 +18,7 @@ export const isAuthenticated = async (
   // Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJDaHJ5c3RpYW4iLCJpYXQiOjE3MTUwODczNzcsImV4cCI6MTcxNTA5MDk3Nywic3ViIjoiMiJ9.Zq0qHunKj507n9grOFb14Cf-5QU-sVumimtb1_kGazs
   const [_, token] = authorization.split(" ");
 
-  const secret = process.env.JWT_SECRET as string;
+  const secret = parsedEnv.JWT_SECRET;
 
   const jwtPayload = verify(token, secret);
 

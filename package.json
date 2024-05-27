@@ -8,10 +8,11 @@
     "test": "dotenv -e .env.test -- jest --verbose --runInBand",
     "migrate:dev": "dotenv -e .env -- npx prisma migrate dev",
     "migrate:test": "dotenv -e .env.test -- npx prisma migrate dev",
-    "prisma:studio:test": "dotenv -e .env.test -- npx prisma studio"
+    "prisma:studio:test": "dotenv -e .env.test -- npx prisma studio",
+    "db:seed": "npx prisma db seed"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "dotenv -e .env.dev ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",

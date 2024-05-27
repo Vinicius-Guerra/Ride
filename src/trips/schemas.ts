@@ -16,6 +16,7 @@ export const tripSchema = z.object({
 
 export const tripPayloadSchema = tripSchema.omit({
   id: true,
+  status: true,
   createdAt: true,
   updatedAt: true,
 });

@@ -1,7 +1,15 @@
 import { prisma } from "../../../../prisma/database";
+import { DriverFactory } from "../../../drivers/__tests__/factories";
+import { Driver } from "../../../drivers/interfaces";
 import { retrieveCarService } from "../../services";
 
 describe("Car service retrieve unit tests", () => {
+  let driver: Driver;
+
+  beforeAll(async () => {
+    driver = await DriverFactory.create();
+  });
+
   beforeEach(async () => {
     await prisma.car.deleteMany();
   });
@@ -12,15 +20,10 @@ describe("Car service retrieve unit tests", () => {
   });
 
   test("Should be able to retrieve a Car by id", async () => {
-    // SETUP
-    const driverData = {
-      email: "something@mail.com",
-      password: "1234",
-      firstName: "Chrystian",
-      lastName: "Rodolfo",
-    };
-
-    const driver = await prisma.driver.create({ data: driverData });
+    /* 
+      TODO:
+      - Utilizar DriverFactory
+    */
 
     const car = {
       model: "Corsa Sedan",

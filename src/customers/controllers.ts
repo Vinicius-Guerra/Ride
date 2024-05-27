@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createCustomerService } from "./services";
+import { createCustomerService, listCustomerService } from "./services";
 
 export const createCustomerController = async (
   req: Request,
@@ -10,4 +10,13 @@ export const createCustomerController = async (
   });
 
   return res.status(201).json(createdCustomer);
+};
+
+export const listCustomerController = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const customers = await listCustomerService();
+
+  return res.status(200).json(customers);
 };

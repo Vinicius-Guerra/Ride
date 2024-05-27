@@ -1,23 +1,32 @@
 import { prisma } from "../../prisma/database";
-import { ApiError } from "../@shared/errors/api.errors";
+import { DriverAlreadyHaveCarError } from "../drivers/errors";
+import { CarNotFoundError, LicensePlateAlreadyUsedError } from "./errors";
+
 import { CarPayload, Car } from "./interfaces";
 
-export const createCarService = async (payload: CarPayload): Promise<Car> => {
+const isLicensePlateUnique = async (licensePlate: string) => {
   const carWithDuplicatedLicensePlate = await prisma.car.findUnique({
-    where: { licensePlate: payload.licensePlate },
+    where: { licensePlate: licensePlate },
   });
 
   if (carWithDuplicatedLicensePlate) {
-    throw new ApiError("License plate already used.", 409);
+    throw new LicensePlateAlreadyUsedError();
   }
+};
 
+const isDriverUnique = async (driverId: number) => {
   const carWithDuplicatedDriver = await prisma.car.findUnique({
-    where: { driverId: payload.driverId },
+    where: { driverId: driverId },
   });
 
   if (carWithDuplicatedDriver) {
-    throw new ApiError("This driver already have a car.", 409);
+    throw new DriverAlreadyHaveCarError();
   }
+};
+
+export const createCarService = async (payload: CarPayload): Promise<Car> => {
+  await isLicensePlateUnique(payload.licensePlate);
+  await isDriverUnique(payload.driverId);
 
   const newCar = await prisma.car.create({ data: payload });
 
@@ -32,19 +41,13 @@ export const retrieveCarService = async (carId: number): Promise<Car> => {
   const car = await prisma.car.findUnique({ where: { id: carId } });
 
   if (!car) {
-    throw new ApiError("Car not found.", 404);
+    throw new CarNotFoundError();
   }
 
   return car;
 };
 
 export const deleteCarService = async (carId: number) => {
-  // const car = await prisma.car.findUnique({ where: { id: carId } });
-
-  // if (!car) {
-  //   throw new Error("Car not found.");
-  // }
-
   await retrieveCarService(carId);
 
   await prisma.car.delete({ where: { id: carId } });
@@ -57,23 +60,11 @@ export const partialUpdateCarService = async (
   await retrieveCarService(carId);
 
   if (payload.licensePlate) {
-    const sameLicensePlateCar = await prisma.car.findUnique({
-      where: { licensePlate: payload.licensePlate },
-    });
-
-    if (sameLicensePlateCar) {
-      throw new ApiError("License plate already used.", 409);
-    }
+    await isLicensePlateUnique(payload.licensePlate);
   }
 
   if (payload.driverId) {
-    const carWithDuplicatedDriver = await prisma.car.findUnique({
-      where: { driverId: payload.driverId },
-    });
-
-    if (carWithDuplicatedDriver) {
-      throw new ApiError("This driver already have a car.", 409);
-    }
+    await isDriverUnique(payload.driverId);
   }
 
   const updatedCar = await prisma.car.update({

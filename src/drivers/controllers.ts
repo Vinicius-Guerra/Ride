@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createDriverService } from "./services";
+import { createDriverService, listDriverService } from "./services";
 
 export const createDriverController = async (
   req: Request,
@@ -10,4 +10,15 @@ export const createDriverController = async (
   });
 
   return res.status(201).json(createdDriver);
+};
+
+export const listDriverController = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { paginationData } = res.locals;
+
+  const drivers = await listDriverService(paginationData);
+
+  return res.status(200).json(drivers);
 };

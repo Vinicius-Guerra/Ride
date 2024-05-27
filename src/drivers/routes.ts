@@ -1,34 +1,25 @@
 import { Router } from "express";
-import { isBodyValid } from "../@shared/middlewares";
+import { handlePagination, isBodyValid } from "../@shared/middlewares";
 import { carPayloadSchema } from "../cars/schemas";
 import { createCarController } from "../cars/controllers";
-import { createDriverController } from "./controllers";
+import { createDriverController, listDriverController } from "./controllers";
 import { driverPayloadSchema } from "./schemas";
-import { driverExists, isAccountOwner } from "./middleware";
-import { isAuthenticated } from "../session/middleware";
 
+
+import { ParamType } from "../@shared/interfaces";
+import { isAuthenticated } from "../session/middleware";
+import { driverExists, isAccountOwner } from "./middleware";
 
 export const driverRouter = Router();
 
-driverRouter.post(
-  "/",
-  isBodyValid(driverPayloadSchema),
-  createDriverController
-);
+driverRouter.post("", isBodyValid(driverPayloadSchema), createDriverController);
 
-/*
-  Esteira de validações:
-  1. Está autenticado? (isAuthenticaded)
-  2. driverId existe? (driverExists)
-  3. Dono do token é o dono do recurso (driverId)? (isAccountOwner)
-  4. Corpo da req é valido? (isBodyValid)
-*/
+driverRouter.get("", handlePagination, listDriverController);
 
-// DESAFIO -> CRIAR TESTES PARA A ROTA ABAIXO
 driverRouter.post(
   "/:driverId/cars",
   isAuthenticated,
-  driverExists,
+  driverExists(ParamType.URL_PARAM),
   isAccountOwner,
   isBodyValid(carPayloadSchema),
   createCarController

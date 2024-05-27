@@ -1,9 +1,7 @@
 import { prisma } from "../../../../prisma/database";
 import supertest from "supertest";
 import { app } from "../../../app";
-import { Driver } from "@prisma/client";
 import { DriverPayload } from "../../../drivers/interfaces";
-import { hash } from "bcryptjs";
 import { DriverFactory } from "../../../drivers/__tests__/factories";
 
 describe("POST /login", () => {
@@ -36,5 +34,4 @@ describe("POST /login", () => {
     expect(response.status).toBe(200);
   });
 
- 
 });

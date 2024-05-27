@@ -1,12 +1,10 @@
 import { prisma } from "../../../../prisma/database";
 import supertest from "supertest";
 import { app } from "../../../app";
-import { Driver } from "@prisma/client";
 
 describe("POST /drivers", () => {
   const request = supertest(app);
   const endpoint = "/api/drivers";
-
 
   beforeEach(async () => {
     await prisma.driver.deleteMany();

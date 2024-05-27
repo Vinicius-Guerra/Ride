@@ -1,7 +1,6 @@
 import { prisma } from "../../../../prisma/database";
 import supertest from "supertest";
 import { app } from "../../../app";
-import { Driver } from "@prisma/client";
 
 describe("POST /customers", () => {
   const request = supertest(app);

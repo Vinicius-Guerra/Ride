@@ -1,6 +1,7 @@
 import { parsedEnv } from "./@shared/configs";
+import { logger } from "./@shared/loggers/winston.logger";
 import { app } from "./app";
-import { logger } from "./configs/winston.logger";
+
 
 const PORT = parsedEnv.PORT || 3000;
 
