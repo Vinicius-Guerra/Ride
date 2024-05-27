@@ -3,6 +3,8 @@ import supertest from "supertest";
 import { app } from "../../../app";
 import { Driver } from "@prisma/client";
 import { sign } from "jsonwebtoken";
+import { DriverFactory } from "../../../drivers/__tests__/factories";
+import { TokenFactory } from "../../../session/factories";
 
 describe("POST /drivers/:driverId/cars", () => {
   const request = supertest(app);
@@ -15,27 +17,12 @@ describe("POST /drivers/:driverId/cars", () => {
   let notDriverToken: string;
 
   beforeAll(async () => {
-    const driverData = {
-      email: "driver1@mail.com",
-      password: "1234",
-      firstName: "Chrystian",
-      lastName: "Rodolfo",
-    };
 
-    const driver2Data = {
-      email: "driver2@mail.com",
-      password: "1234",
-      firstName: "Chrystian",
-      lastName: "Rodolfo",
-    };
+    driver = await DriverFactory.create();
+    validDriverToken = TokenFactory.create(driver.id);
 
-    driver = await prisma.driver.create({ data: driverData });
-    const driver2 = await prisma.driver.create({ data: driver2Data });
-
-    validDriverToken = sign({}, process.env.JWT_SECRET as string, {
-      subject: driver.id.toString(),
-      expiresIn: process.env.JWT_EXPIRES_IN as string,
-    });
+    const driver2 = await DriverFactory.create();
+    notDriverToken = TokenFactory.create(driver2.id);
 
     invalidExpiredToken = sign(
       {
@@ -47,10 +34,6 @@ describe("POST /drivers/:driverId/cars", () => {
       }
     );
 
-    notDriverToken = sign({}, process.env.JWT_SECRET as string, {
-      subject: driver2.id.toString(),
-      expiresIn: process.env.JWT_EXPIRES_IN as string,
-    });
   });
 
   beforeEach(async () => {

@@ -7,7 +7,6 @@ describe("POST /drivers", () => {
   const request = supertest(app);
   const endpoint = "/api/drivers";
 
-  beforeAll(async () => {});
 
   beforeEach(async () => {
     await prisma.driver.deleteMany();

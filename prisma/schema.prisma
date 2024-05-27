@@ -65,7 +65,6 @@ model Trip {
 enum TripStatus {
   IN_PROGRESS
   COMPLETED
-  UPCOMING
 }
 
 model Payment {
