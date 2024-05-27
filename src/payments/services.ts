@@ -1,5 +1,5 @@
 import { prisma } from "../../prisma/database";
-import { ApiError } from "../errors/api.errors";
+import { ApiError } from "../@shared/errors/api.errors";
 import { Payment, PaymentPayload } from "./interfaces";
 import { paymentPayloadSchema, paymentSchema } from "./schemas";
 

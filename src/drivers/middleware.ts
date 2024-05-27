@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { prisma } from "../../prisma/database";
-import { ApiError } from "../errors/api.errors";
-import { ParamType } from "../@shared/interfaces";
+import { ApiError } from "../@shared/errors/api.errors";
+import { ParamType } from "../@shared/interfaces/enum.interfaces";
 
 export const driverExists = 
 (paramType: ParamType) =>

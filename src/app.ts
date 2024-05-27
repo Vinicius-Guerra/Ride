@@ -1,7 +1,7 @@
 import express from "express";
 import "express-async-errors";
 import { initRoutes } from "./routes";
-import { handleError } from "./errors/handle.errors";
+import { handleError } from "./@shared/errors/handle.errors";
 // import logger from "morgan";
 import { checkEnvVariables } from "./configs/checkEnvVariables";
 import { customMorganLogger } from "./configs/morgan.logger";

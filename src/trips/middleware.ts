@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { ApiError } from "../errors/api.errors";
+import { ApiError } from "../@shared/errors/api.errors";
 
 export const isTripDriver = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { sub } = res.locals.decoded;

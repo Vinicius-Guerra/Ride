@@ -1,6 +1,6 @@
 import { hash } from "bcryptjs";
 import { prisma } from "../../prisma/database";
-import { ApiError } from "../errors/api.errors";
+import { ApiError } from "../@shared/errors/api.errors";
 import { Customer, CustomerPayload, CustomerResponse } from "./interfaces";
 import { customerResponseSchema } from "./schemas";
 

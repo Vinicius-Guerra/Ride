@@ -1,0 +1,1 @@
+export { parsedEnv } from "./env.vars.config";

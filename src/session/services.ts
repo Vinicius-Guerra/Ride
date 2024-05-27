@@ -1,6 +1,6 @@
 import { compare } from "bcryptjs";
 import { prisma } from "../../prisma/database";
-import { ApiError } from "../errors/api.errors";
+import { ApiError } from "../@shared/errors/api.errors";
 import { SessionPayload } from "./interfaces";
 import { sessionResponseSchema } from "./schemas";
 import { sign } from "jsonwebtoken";
