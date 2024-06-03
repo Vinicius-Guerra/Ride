@@ -33,9 +33,6 @@ describe("Car service delete unit tests", () => {
 
     const cars = await prisma.car.findMany();
     expect(cars).toEqual([]);
-    // OU
-    // const car = await prisma.car.findUnique({ where: { id: createdCar.id } });
-    // expect(car).toBeFalsy();
   });
 
   test("Should throw an error if deleting a Car with non existing id", async () => {
@@ -45,8 +42,5 @@ describe("Car service delete unit tests", () => {
     await expect(deleteCarService(nonExistingId)).rejects.toThrow(
       "Car not found."
     );
-    // expect(async () => await retrieve(nonExistingId)).rejects.toThrow(
-    //   "Car not found."
-    // );
   });
 });

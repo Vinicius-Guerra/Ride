@@ -1,7 +1,7 @@
 import { prisma } from "../../prisma/database";
+import { ApiError } from "../@shared/errors/api.errors";
 import { DriverAlreadyHaveCarError } from "../drivers/errors";
 import { CarNotFoundError, LicensePlateAlreadyUsedError } from "./errors";
-
 import { CarPayload, Car } from "./interfaces";
 
 const isLicensePlateUnique = async (licensePlate: string) => {
@@ -73,5 +73,4 @@ export const partialUpdateCarService = async (
   });
 
   return updatedCar;
-  // return { id: carId, ...payload };
 };

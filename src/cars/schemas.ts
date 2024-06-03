@@ -8,7 +8,6 @@ export const carSchema = z.object({
       "License plate has an invalid format. It must be in `AAA-1111` format.",
   }),
   driverId: z.number().positive(),
-  // aaa-1234
 });
 
 export const carPayloadSchema = carSchema.omit({ id: true, driverId: true });

@@ -1,7 +1,9 @@
 import { prisma } from "../../../../prisma/database";
 import supertest from "supertest";
 import { app } from "../../../app";
+import { Driver } from "@prisma/client";
 import { DriverPayload } from "../../../drivers/interfaces";
+import { hash } from "bcryptjs";
 import { DriverFactory } from "../../../drivers/__tests__/factories";
 
 describe("POST /login", () => {
@@ -11,6 +13,13 @@ describe("POST /login", () => {
   const rawPassword = "1234";
 
   beforeAll(async () => {
+    // driverData = {
+    //   email: "driver1@mail.com",
+    //   password: await hash(rawPassword, 10),
+    //   firstName: "Chrystian",
+    //   lastName: "Rodolfo",
+    // };
+    // await prisma.driver.create({ data: driverData });
     await DriverFactory.create();
   });
 
@@ -34,4 +43,6 @@ describe("POST /login", () => {
     expect(response.status).toBe(200);
   });
 
+  // TODO:
+  // - Implementar teste para verificação de credenciais erradas (email / password).
 });
