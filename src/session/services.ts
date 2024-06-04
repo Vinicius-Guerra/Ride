@@ -29,3 +29,27 @@ export const login = async ({ email, password }: SessionPayload) => {
 
   return sessionResponseSchema.parse({ token });
 };
+
+export const loginCustomer = async ({ email, password }: SessionPayload) => {
+  const foundCustomer = await prisma.customer.findUnique({ where: { email } });
+
+  if (!foundCustomer) {
+    throw new ApiError("Invalid credentials.", 401);
+  }
+
+  const passwordMatch = await compare(password, foundCustomer.password);
+
+  if (!passwordMatch) {
+    throw new ApiError("Invalid credentials.", 401);
+  }
+
+  const secret = parsedEnv.JWT_SECRET;
+  const expiresIn = parsedEnv.JWT_EXPIRES_IN;
+
+  const token = sign({ firstName: foundCustomer.firstName }, secret, {
+    subject: foundCustomer.id.toString(),
+    expiresIn: expiresIn,
+  });
+
+  return sessionResponseSchema.parse({ token });
+};

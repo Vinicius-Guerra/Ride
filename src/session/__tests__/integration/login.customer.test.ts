@@ -1,27 +1,27 @@
 import { prisma } from "../../../../prisma/database";
 import supertest from "supertest";
 import { app } from "../../../app";
-import { DriverPayload } from "../../../drivers/interfaces";
 import { hash } from "bcryptjs";
-import { DriverFactory } from "../../../drivers/__tests__/factories";
+import { CustomerPayload } from "../../../customers/interfaces";
+import { CustomerFactory } from "../../../customers/__tests__/factories";
 
-describe("POST /login", () => {
+describe("POST /login/customer", () => {
   const request = supertest(app);
-  const endpoint = "/api/login";
-  let driverData: DriverPayload;
+  const endpoint = "/api/login/customer";
+  let customerData: CustomerPayload;
   const rawPassword = "1234";
 
   beforeAll(async () => {
-    driverData = await DriverFactory.create({ password: await hash(rawPassword, 10) });
+    customerData = await CustomerFactory.create({ password: await hash(rawPassword, 10) });
   });
 
   afterAll(async () => {
-    await prisma.driver.deleteMany();
+    await prisma.customer.deleteMany();
   });
 
-  test("Should be able to login a Driver", async () => {
+  test("Should be able to login a Customer", async () => {
     const validPayload = {
-      email: driverData.email,
+      email: customerData.email,
       password: rawPassword,
     };
 
@@ -52,7 +52,7 @@ describe("POST /login", () => {
 
   test("Should not be able to login with incorrect password", async () => {
     const invalidPasswordPayload = {
-      email: driverData.email,
+      email: customerData.email,
       password: "invalidPassword",
     };
 
