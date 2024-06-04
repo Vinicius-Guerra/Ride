@@ -11,6 +11,7 @@ export const driverSchema = z.object({
   updatedAt: z.date(),
 });
 
+
 export const driverPayloadSchema = driverSchema.omit({
   id: true,
   createdAt: true,
