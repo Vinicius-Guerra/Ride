@@ -76,8 +76,16 @@ describe("POST /drivers/:driverId/cars", () => {
       .auth(validDriverToken, { type: "bearer" })
       .send(invalidPayload);
 
+    expect(response.status).toBe(400);
+
     const requiredKeys = ["model", "licensePlate"];
-    const receivedKeys = Object.keys(response.body.errors);
+    const responseErrors = response.body.errors;
+
+    // verificando se responseErrors não é undefined ou null
+    expect(responseErrors).toBeDefined();
+    expect(responseErrors).not.toBeNull();
+
+    const receivedKeys = Object.keys(responseErrors);
     expect(receivedKeys).toEqual(requiredKeys);
 
     requiredKeys.forEach((requiredKey) => {

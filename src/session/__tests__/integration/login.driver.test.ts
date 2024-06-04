@@ -13,14 +13,7 @@ describe("POST /login", () => {
   const rawPassword = "1234";
 
   beforeAll(async () => {
-    // driverData = {
-    //   email: "driver1@mail.com",
-    //   password: await hash(rawPassword, 10),
-    //   firstName: "Chrystian",
-    //   lastName: "Rodolfo",
-    // };
-    // await prisma.driver.create({ data: driverData });
-    await DriverFactory.create();
+    driverData = await DriverFactory.create({ password: await hash(rawPassword, 10) });
   });
 
   afterAll(async () => {
@@ -43,6 +36,33 @@ describe("POST /login", () => {
     expect(response.status).toBe(200);
   });
 
-  // TODO:
-  // - Implementar teste para verificação de credenciais erradas (email / password).
+  test("Should not be able to login with incorrect email", async () => {
+    const invalidEmailPayload = {
+      email: "invalid.email.com.br",
+      password: rawPassword,
+    };
+
+    const response = await request.post(endpoint).send(invalidEmailPayload);
+
+    expect(response.body).toEqual({
+      error: "Invalid credentials.",
+    });
+
+    expect(response.status).toBe(401);
+  });
+
+  test("Should not be able to login with incorrect password", async () => {
+    const invalidPasswordPayload = {
+      email: driverData.email,
+      password: "invalidPassword",
+    };
+
+    const response = await request.post(endpoint).send(invalidPasswordPayload);
+
+    expect(response.body).toEqual({
+      error: "Invalid credentials.",
+    });
+
+    expect(response.status).toBe(401);
+  });
 });
