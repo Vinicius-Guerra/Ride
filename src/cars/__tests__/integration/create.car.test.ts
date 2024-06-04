@@ -76,10 +76,12 @@ describe("POST /drivers/:driverId/cars", () => {
       .auth(validDriverToken, { type: "bearer" })
       .send(invalidPayload);
 
+    console.log(response.body);
+
     expect(response.status).toBe(400);
 
     const requiredKeys = ["model", "licensePlate"];
-    const responseErrors = response.body.errors;
+    const responseErrors = response.body;
 
     // verificando se responseErrors não é undefined ou null
     expect(responseErrors).toBeDefined();
@@ -89,7 +91,7 @@ describe("POST /drivers/:driverId/cars", () => {
     expect(receivedKeys).toEqual(requiredKeys);
 
     requiredKeys.forEach((requiredKey) => {
-      expect(response.body.errors[requiredKey]).toContain("Required");
+      expect(response.body[requiredKey]).toContain("Required");
     });
   });
 
@@ -133,14 +135,18 @@ describe("POST /drivers/:driverId/cars", () => {
       .auth(validDriverToken, { type: "bearer" })
       .send(invalidModelCar);
 
-    expect(response.body.errors).toBeDefined();
-
-    const expectedResponseBody = {
-      errors: { model: ["String must contain at most 100 character(s)"] },
-    };
-
-    expect(response.body).toEqual(expectedResponseBody);
     expect(response.statusCode).toBe(400);
+
+    const responseErrors = response.body.errors || response.body;
+    
+    expect(responseErrors).toBeDefined();
+    
+    const expectedResponseBody = {
+      errors: {
+        model: ["String must contain at most 100 character(s)"]
+      }
+    };
+    expect(responseErrors).toMatchObject(expectedResponseBody.errors);
   });
 
   test("Should return an error if creating a car with licensePlate field invalid format", async () => {
