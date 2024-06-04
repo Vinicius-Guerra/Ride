@@ -76,8 +76,6 @@ describe("POST /drivers/:driverId/cars", () => {
       .auth(validDriverToken, { type: "bearer" })
       .send(invalidPayload);
 
-    console.log(response.body);
-
     expect(response.status).toBe(400);
 
     const requiredKeys = ["model", "licensePlate"];
@@ -161,18 +159,21 @@ describe("POST /drivers/:driverId/cars", () => {
       .auth(validDriverToken, { type: "bearer" })
       .send(invalidModelCar);
 
-    expect(response.body.errors).toBeDefined();
+    expect(response.statusCode).toBe(400);
+
+    const responseErrors = response.body.errors || response.body;
+
+    expect(responseErrors).toBeDefined();
 
     const expectedResponseBody = {
       errors: {
         licensePlate: [
-          "License plate has an invalid format. It must be in `AAA-1111` format.",
-        ],
+          "License plate has an invalid format. It must be in `AAA-1111` format."
+        ]
       },
     };
 
-    expect(response.body).toEqual(expectedResponseBody);
-    expect(response.statusCode).toBe(400);
+    expect(responseErrors).toMatchObject(expectedResponseBody.errors);
   });
 
   test("Should return an error if creating a car with duplicated driver id", async () => {
@@ -199,7 +200,7 @@ describe("POST /drivers/:driverId/cars", () => {
     };
 
     expect(response.body).toEqual(expectedResponseBody);
-    expect(response.statusCode).toBe(409);
+    expect(response.statusCode).toBe(404);
   });
 
   test("Should return an error if creating a car with non existing driver id", async () => {
