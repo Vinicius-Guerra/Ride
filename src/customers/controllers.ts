@@ -37,9 +37,9 @@ export const updateCustomerController = async (
 ): Promise<Response> => {
   const id = Number(req.params.id);
 
-  const customers = await updateCustomerService(id, req.body);
+  const customerUpdate = await updateCustomerService(id, req.body);
 
-  return res.status(200).json(customers);
+  return res.status(200).json(customerUpdate);
 }
 
 export const deleteCustomerController = async (

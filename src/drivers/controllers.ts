@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createDriverService, listDriverService } from "./services";
+import { createDriverService, deleteDriverService, listDriverService, listOneDriverService, updateDriverService } from "./services";
 
 export const createDriverController = async (
   req: Request,
@@ -21,4 +21,36 @@ export const listDriverController = async (
   const drivers = await listDriverService(paginationData);
 
   return res.status(200).json(drivers);
+};
+
+export const listOneDriverController = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const id = Number(req.params.id);
+  const driver = await listOneDriverService(id);
+
+  return res.status(200).json(driver);
+};
+
+export const updateDriverController = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const id = Number(req.params.id);
+
+  const driverUpdate = await updateDriverService(id, req.body);
+
+  return res.status(200).json(driverUpdate);
+}
+
+export const deleteDriverController = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const id = Number(req.params.id);
+
+  const deleteDriver = await deleteDriverService(id);
+
+  return res.status(204).json();
 };

@@ -18,4 +18,6 @@ export const driverPayloadSchema = driverSchema.omit({
   updatedAt: true,
 });
 
+export const driverUpdatePayloadSchema = driverPayloadSchema.partial();
+
 export const driverResponseSchema = driverSchema.omit({ password: true });

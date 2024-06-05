@@ -1,7 +1,7 @@
 import { hash } from "bcryptjs";
 import { prisma } from "../../prisma/database";
 import { ApiError } from "../@shared/errors/api.errors";
-import { Driver, DriverPayload, DriverResponse } from "./interfaces";
+import { Driver, DriverPayload, DriverResponse, DriverUpdatePayload } from "./interfaces";
 import { driverResponseSchema } from "./schemas";
 import {
   PaginationData,
@@ -46,4 +46,20 @@ export const listDriverService = async ({
   };
 
   return paginatedResponse;
+};
+
+export const listOneDriverService = async (id: number): Promise<DriverResponse> => {
+  const driver = await prisma.driver.findFirst({ where: { id } });
+
+  return driverResponseSchema.parse(driver);
+};
+
+export const updateDriverService = async (id: number, payload: DriverUpdatePayload): Promise<DriverResponse> => {
+  const driverUpdated = await prisma.driver.update({ where: { id }, data: payload });
+
+  return driverResponseSchema.parse(driverUpdated);
+};
+
+export const deleteDriverService = async (id: number): Promise<void> => {
+  await prisma.driver.delete({ where: { id } });
 };
