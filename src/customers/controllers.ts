@@ -25,7 +25,8 @@ export const listOneCustomerController = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const customer = await listOneCustomerService(res.locals.customer);
+  const id = Number(req.params.id);
+  const customer = await listOneCustomerService(id);
 
   return res.status(200).json(customer);
 };

@@ -5,7 +5,7 @@ export const sessionRouter = Router();
 
 /**
  * @swagger
- * api/session:
+ * api/login:
  *   post:
  *     summary: Create a new session (login) for drivers
  *     tags: [Session Login]
@@ -27,7 +27,7 @@ sessionRouter.post("/", sessionController);
 
 /**
  * @swagger
- * api/session/customer:
+ * api/login/customer:
  *   post:
  *     summary: Create a new session (login) for customers
  *     tags: [Session Login]

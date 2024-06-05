@@ -9,20 +9,26 @@ export const isAuthenticated = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const { authorization } = req.headers;
+  const authorization = req.headers.authorization;
 
   if (!authorization) {
     throw new ApiError("Token is required.", 401);
   }
 
-  // Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJDaHJ5c3RpYW4iLCJpYXQiOjE3MTUwODczNzcsImV4cCI6MTcxNTA5MDk3Nywic3ViIjoiMiJ9.Zq0qHunKj507n9grOFb14Cf-5QU-sVumimtb1_kGazs
-  const [_, token] = authorization.split(" ");
+  const [bearer, token] = authorization.split(" ");
+
+  if (bearer !== "Bearer" || !token) {
+    throw new ApiError("Invalid token format.", 401);
+  }
 
   const secret = parsedEnv.JWT_SECRET;
 
-  const jwtPayload = verify(token, secret);
-
-  res.locals = { ...res.locals, decoded: jwtPayload };
-
-  return next();
+  try {
+    const jwtPayload = verify(token, secret);
+    res.locals = { ...res.locals, decoded: jwtPayload };
+    return next();
+  } catch (err) {
+    throw new ApiError("Invalid or expired token.", 401);
+  }
 };
+

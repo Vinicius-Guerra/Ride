@@ -117,7 +117,6 @@ describe("Car service partial update unit tests", () => {
       partialUpdateCarService(toUpdatePayload, createdCar1.id)
     ).rejects.toThrow("This driver already have a car.");
 
-    // TODO: Avaliar se registro correspondente ao id do dado enviado para update nao foi alterado
     const receivedCar1 = await prisma.car.findUnique({
       where: { id: createdCar1.id },
     });

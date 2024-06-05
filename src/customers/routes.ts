@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { isBodyValid } from "../@shared/middlewares";
+import { handlePagination, isBodyValid } from "../@shared/middlewares";
 import {
   createCustomerController,
   deleteCustomerController,
@@ -8,7 +8,7 @@ import {
   updateCustomerController,
 } from "./controllers";
 import { customerPayloadSchema, customerUpdatePayloadSchema } from "./schemas";
-import { customerExists, isCostumerOwner } from "./middleware";
+import { customerExists, isCustomerOwner } from "./middleware";
 import { ParamType } from "../@shared/interfaces";
 import { isAuthenticated } from "../session/middleware";
 
@@ -142,8 +142,10 @@ customerRouter.get("", listCustomerController);
  *                 $ref: '#/components/schemas/CustomerResponse'
  *       400:
  *         description: Bad Request 
+ *       401:
+ *         description: Token is required.
  */
-customerRouter.get("/:id", isAuthenticated, isCostumerOwner.execute, listOneCustomerController);
+customerRouter.get("/:id", isAuthenticated,listOneCustomerController);
 
 
 /**
@@ -166,9 +168,15 @@ customerRouter.get("/:id", isAuthenticated, isCostumerOwner.execute, listOneCust
  *             schema:
  *               $ref: '#/components/schemas/CustomerResponse'
  *       400:
- *         description: Bad Request
+ *         description: Invalid Customer Id
+ *       401:
+ *         description: Token is required.
+ *       403:
+ *         description: User is not the owner of this customer
+ *       404:
+ *         description: Customer not found
  */
-customerRouter.patch("/:id", isAuthenticated, isCostumerOwner.execute,isBodyValid(customerUpdatePayloadSchema), customerExists(ParamType.BODY_PARAM), updateCustomerController);
+customerRouter.patch("/:id", isAuthenticated, isCustomerOwner.execute, isBodyValid(customerUpdatePayloadSchema), updateCustomerController);
 
 
 /**
@@ -185,5 +193,9 @@ customerRouter.patch("/:id", isAuthenticated, isCostumerOwner.execute,isBodyVali
  *             type: object
  *       400:
  *         description: Bad Request
+ *       401:
+ *         description: Token is required.
+ *       403:
+ *         description: User is not the owner of this customer
  */
-customerRouter.delete("/:id", isAuthenticated, isCostumerOwner.execute, deleteCustomerController);
+customerRouter.delete("/:id", isAuthenticated, isCustomerOwner.execute, deleteCustomerController);

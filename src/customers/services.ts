@@ -21,13 +21,15 @@ export const createCustomerService = async (
   return customerResponseSchema.parse(newCustomer);
 };
 
-export const listCustomerService = async (): Promise<CustomerResponse> => {
+export const listCustomerService = async (): Promise<CustomerResponse[]> => {
   const customers = await prisma.customer.findMany();
   
-  return customerResponseSchema.parse(customers);
+  return customers;
 };
 
-export const listOneCustomerService = async (customer: Customer): Promise<CustomerResponse> => {
+export const listOneCustomerService = async (id: number): Promise<CustomerResponse> => {
+  const customer = await prisma.customer.findFirst({ where: { id } });
+
   return customerResponseSchema.parse(customer);
 };
 
