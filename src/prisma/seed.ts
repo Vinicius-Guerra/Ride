@@ -1,6 +1,5 @@
-//import { TripStatus } from "@prisma/client";
-
-import { faker } from "@faker-js/faker";
+// import { TripStatus } from "@prisma/client";
+// import { faker } from "@faker-js/faker";
 import { hash } from "bcryptjs";
 import { prisma } from "./database";
 import { DriverFactory } from "../drivers/__tests__/factories";
@@ -17,9 +16,9 @@ async function resetDatabase() {
 
 const DRIVER_AMOUNT = 102;
 const CUSTOMER_AMOUNT = DRIVER_AMOUNT;
-const TRIPS_COMPLETED = CUSTOMER_AMOUNT * 100;
-const TRIPS_IN_PROGRESS = CUSTOMER_AMOUNT / 2;
-const MAX_FUTURE_HOURS_UPDATED_AT = 25;
+// const TRIPS_COMPLETED = CUSTOMER_AMOUNT * 100;
+// const TRIPS_IN_PROGRESS = CUSTOMER_AMOUNT / 2;
+// const MAX_FUTURE_HOURS_UPDATED_AT = 25;
 const DEFAULT_DRIVER_PASSWORD = "1234";
 const DEFAULT_CUSTOMER_PASSWORD = "ABCD";
 
