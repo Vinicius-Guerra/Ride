@@ -140,7 +140,6 @@ driverRouter.get("", handlePagination, listDriverController);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
  *               items:
  *                 $ref: '#/components/schemas/DriverResponse'
  *       400:

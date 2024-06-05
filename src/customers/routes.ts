@@ -133,7 +133,7 @@ customerRouter.get("", listCustomerController);
  *     parameters:
  *     responses:
  *       200:
- *         description: A list one customers
+ *         description: Get One customers
  *         content:
  *           application/json:
  *             schema:

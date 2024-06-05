@@ -37,6 +37,16 @@ const options = {
             dateOfBirth: { type: 'string', format: 'date', nullable: true, description: "The driver's date of birth" }
           }
         },
+        DriverUpdatePayload: {
+          type: 'object',
+          properties: {
+            email: { type: 'string', format: 'email', description: "The new driver's email" },
+            password: { type: 'string', description: "The new driver's password" },
+            firstName: { type: 'string', description: "The new driver's first name" },
+            lastName: { type: 'string', description: "The new driver's last name" },
+            dateOfBirth: { type: 'string', format: 'date', description: "The new date from driver"}
+          }
+        },
         DriverResponse: {
           type: 'object',
           properties: {
