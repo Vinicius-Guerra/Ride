@@ -1,5 +1,5 @@
 import { hash } from "bcryptjs";
-import { prisma } from "../../prisma/database";
+import { prisma } from "../prisma/database";
 import { ApiError } from "../@shared/errors/api.errors";
 import { Driver, DriverPayload, DriverResponse, DriverUpdatePayload } from "./interfaces";
 import { driverResponseSchema } from "./schemas";

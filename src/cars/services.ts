@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/database";
+import { prisma } from "../prisma/database";
 import { ApiError } from "../@shared/errors/api.errors";
 import { DriverAlreadyHaveCarError } from "../drivers/errors";
 import { CarNotFoundError, LicensePlateAlreadyUsedError } from "./errors";
