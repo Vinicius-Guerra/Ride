@@ -1,6 +1,6 @@
 import { fakerPT_BR as faker } from "@faker-js/faker";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../../@shared/database/database";
+import { prisma } from "../../../prisma/database";
 
 export class CarFactory {
   static build = (data: Partial<Prisma.CarCreateWithoutDriverInput> = {}) => {

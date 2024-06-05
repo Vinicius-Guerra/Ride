@@ -2,7 +2,7 @@
 
 import { faker } from "@faker-js/faker";
 import { hash } from "bcryptjs";
-import { prisma } from "../database/database";
+import { prisma } from "../../../prisma/database";
 import { DriverFactory } from "../../drivers/__tests__/factories";
 import { CustomerFactory } from "../../customers/__tests__/factories";
 //import { PaymentFactory } from "../../payments/__tests__/factories";

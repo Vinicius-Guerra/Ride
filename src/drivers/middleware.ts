@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { prisma } from "../@shared/database/database";
+import { prisma } from "../../prisma/database";
 import { ApiError } from "../@shared/errors/api.errors";
 import { ParamType } from "../@shared/interfaces/enum.interfaces";
 

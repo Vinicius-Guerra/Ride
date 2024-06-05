@@ -1,4 +1,4 @@
-import { prisma } from "../@shared/database/database";
+import { prisma } from "../../prisma/database";
 import { Trip, TripPayload } from "./interfaces";
 import { tripSchema } from "./schemas";
 import { createPaymentService } from "../payments/services";

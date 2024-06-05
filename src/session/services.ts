@@ -1,5 +1,5 @@
 import { compare } from "bcryptjs";
-import { prisma } from "../@shared/database/database";
+import { prisma } from "../../prisma/database";
 import { ApiError } from "../@shared/errors/api.errors";
 import { SessionPayload } from "./interfaces";
 import { sessionResponseSchema } from "./schemas";
