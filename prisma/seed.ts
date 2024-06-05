@@ -2,9 +2,9 @@
 
 import { faker } from "@faker-js/faker";
 import { hash } from "bcryptjs";
-import { prisma } from "../../../prisma/database";
-import { DriverFactory } from "../../drivers/__tests__/factories";
-import { CustomerFactory } from "../../customers/__tests__/factories";
+import { prisma } from "./database";
+import { DriverFactory } from "../src/drivers/__tests__/factories";
+import { CustomerFactory } from "../src/customers/__tests__/factories";
 //import { PaymentFactory } from "../../payments/__tests__/factories";
 
 async function resetDatabase() {
