@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma/database";
+import { prisma } from "../../../@shared/database/database";
 import { DriverFactory } from "../../../drivers/__tests__/factories";
 import { Driver } from "../../../drivers/interfaces";
 import { retrieveCarService } from "../../services";

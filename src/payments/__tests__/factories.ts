@@ -1,6 +1,6 @@
 import { fakerPT_BR as faker } from "@faker-js/faker";
 import { PaymentMethod } from "@prisma/client";
-import { prisma } from "../../../prisma/database";
+import { prisma } from "../../@shared/database/database";
 import { Payment, PaymentPayload } from "../interfaces";
 
 const getRandomValueFromEnum = (givenEnum: object) => {

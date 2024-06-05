@@ -1,6 +1,6 @@
 import { fakerPT_BR as faker } from "@faker-js/faker";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../../../prisma/database";
+import { prisma } from "../../@shared/database/database";
 import { CarFactory } from "../../cars/__tests__/factories";
 
 // FACTORY -> Padrão de Projeto (Design Pattern)

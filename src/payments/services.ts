@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/database";
+import { prisma } from "../@shared/database/database";
 import { Payment, PaymentPayload } from "./interfaces";
 import { paymentSchema } from "./schemas";
 

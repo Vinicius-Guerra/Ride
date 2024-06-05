@@ -1,5 +1,5 @@
 import { Driver } from "@prisma/client";
-import { prisma } from "../../../../prisma/database";
+import { prisma } from "../../../@shared/database/database";
 import { partialUpdateCarService } from "../../services";
 import { DriverFactory } from "../../../drivers/__tests__/factories";
 

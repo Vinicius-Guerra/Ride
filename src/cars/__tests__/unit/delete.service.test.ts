@@ -1,4 +1,4 @@
-import { prisma } from "../../../../prisma/database";
+import { prisma } from "../../../@shared/database/database";
 import { deleteCarService } from "../../services";
 
 describe("Car service delete unit tests", () => {
