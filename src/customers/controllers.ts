@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createCustomerService, listCustomerService } from "./services";
+import { createCustomerService, deleteCustomerService, listCustomerService, listOneCustomerService, updateCustomerService } from "./services";
 
 export const createCustomerController = async (
   req: Request,
@@ -19,4 +19,35 @@ export const listCustomerController = async (
   const customers = await listCustomerService();
 
   return res.status(200).json(customers);
+};
+
+export const listOneCustomerController = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const customer = await listOneCustomerService(res.locals.customer);
+
+  return res.status(200).json(customer);
+};
+
+export const updateCustomerController = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const id = Number(req.params.id);
+
+  const customers = await updateCustomerService(id, req.body);
+
+  return res.status(200).json(customers);
+}
+
+export const deleteCustomerController = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const id = Number(req.params.id);
+
+  const deleteCustomer = await deleteCustomerService(id);
+
+  return res.status(204).json();
 };

@@ -17,3 +17,5 @@ export const customerPayloadSchema = customerSchema.omit({
 });
 
 export const customerResponseSchema = customerSchema.omit({ password: true });
+
+export const customerUpdatePayloadSchema = customerPayloadSchema.partial();

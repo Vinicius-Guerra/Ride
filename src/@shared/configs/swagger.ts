@@ -71,6 +71,15 @@ const options = {
             lastName: { type: 'string', description: "The customer's last name" }
           }
         },
+        CustomerUpdatePayload: {
+          type: 'object',
+          properties: {
+            email: { type: 'string', format: 'email', description: "The new customer's email" },
+            password: { type: 'string', description: "The new customer's password" },
+            firstName: { type: 'string', description: "The new customer's first name" },
+            lastName: { type: 'string', description: "The new customer's last name" }
+          }
+        },
         CustomerResponse: {
           type: 'object',
           properties: {

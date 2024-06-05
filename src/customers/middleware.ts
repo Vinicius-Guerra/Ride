@@ -19,3 +19,20 @@ export const customerExists =
 
     return next();
   };
+
+  export class isCostumerOwner {
+    static async execute(req: Request, res: Response, next: NextFunction) {
+      const userId = res.locals.decode.id;
+      const customerId = req.params.id;
+
+      const customer = await prisma.customer.findFirst({
+        where: { id: Number(customerId) },
+      });
+
+      if(customer?.id !== userId){
+        throw new ApiError("User is not the owner of this customer", 403);
+      }
+
+      next();
+    }
+  }

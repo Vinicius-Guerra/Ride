@@ -1,7 +1,7 @@
 import { hash } from "bcryptjs";
 import { prisma } from "../../prisma/database";
 import { ApiError } from "../@shared/errors/api.errors";
-import { CustomerPayload, CustomerResponse } from "./interfaces";
+import { Customer, CustomerPayload, CustomerResponse, CustomerUpdatePayload } from "./interfaces";
 import { customerResponseSchema } from "./schemas";
 
 export const createCustomerService = async (
@@ -25,4 +25,18 @@ export const listCustomerService = async (): Promise<CustomerResponse> => {
   const customers = await prisma.customer.findMany();
   
   return customerResponseSchema.parse(customers);
+};
+
+export const listOneCustomerService = async (customer: Customer): Promise<CustomerResponse> => {
+  return customerResponseSchema.parse(customer);
+};
+
+export const updateCustomerService = async (id: number, payload: CustomerUpdatePayload): Promise<CustomerResponse> => {
+  const customerUpdated = await prisma.customer.update({ where: { id }, data: payload });
+
+  return customerResponseSchema.parse(customerUpdated);
+};
+
+export const deleteCustomerService = async (id: number): Promise<void> => {
+  await prisma.customer.delete({ where: { id } });
 };
