@@ -23,17 +23,32 @@ async (
   return next();
 };
 
-export const isAccountOwner = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  const { sub } = res.locals.decoded;
-  const { driverId } = req.params;
+  export const isAccountOwner = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const { sub } = res.locals.decoded;
+    const { driverId } = req.params;
+  
+    if (sub !== driverId) {
+      throw new ApiError("You dont have permission to perform this action.", 403);
+    }
+  
+    return next();
+  };
 
-  if (sub !== driverId) {
-    throw new ApiError("You dont have permission to perform this action.", 403);
-  }
-
-  return next();
-};
+  export const isAccountDriverOwner = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const { sub } = res.locals.decoded;
+    const { driverId } = req.params;
+  
+    if (sub.id !== driverId) {
+      throw new ApiError("You dont have permission to perform this action.", 403);
+    }
+  
+    return next();
+  };

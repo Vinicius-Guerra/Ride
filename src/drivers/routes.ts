@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { handlePagination, isBodyValid } from "../@shared/middlewares";
 import { carPayloadSchema } from "../cars/schemas";
-import { createCarController } from "../cars/controllers";
-import { createDriverController, listDriverController, listOneDriverController, updateDriverController } from "./controllers";
+import { createCarController, deleteCarController, listCarController, partialUpdateCarController, retrieveCarController } from "../cars/controllers";
+import { createDriverController, deleteDriverController, listDriverController, listOneDriverController, updateDriverController } from "./controllers";
 import { driverPayloadSchema, driverUpdatePayloadSchema } from "./schemas";
 
 
 import { ParamType } from "../@shared/interfaces";
 import { isAuthenticated } from "../session/middleware";
-import { driverExists, isAccountOwner } from "./middleware";
+import { driverExists, isAccountDriverOwner, isAccountOwner } from "./middleware";
 
 export const driverRouter = Router();
 
@@ -178,7 +178,29 @@ driverRouter.get("/:id", isAuthenticated, listOneDriverController);
  *       404:
  *         description: Driver not found
  */
-driverRouter.patch("/:id", isAuthenticated, isAccountOwner, isBodyValid(driverUpdatePayloadSchema), updateDriverController);
+driverRouter.patch("/:id", isAuthenticated, isAccountDriverOwner, isBodyValid(driverUpdatePayloadSchema), updateDriverController);
+
+
+/**
+ * @swagger
+ * api/drtivers/:id:
+ *   delete:
+ *     summary: Delete a driver
+ *     tags: [Drivers]
+ *     responses:
+ *       204:
+ *         description: Driver delete successfully
+ *         content:
+ *           application/json:
+ *             type: object
+ *       400:
+ *         description: Bad Request
+ *       401:
+ *         description: Token is required.
+ *       403:
+ *         description: User is not the owner of this Driver
+ */
+driverRouter.delete("/:id", isAuthenticated, isAccountDriverOwner, deleteDriverController);
 
 /**
  * @swagger
@@ -254,3 +276,94 @@ driverRouter.post(
   isBodyValid(carPayloadSchema),
   createCarController
 );
+
+/**
+ * @swagger
+ * api/drivers/{driverId}/cars:
+ *   get:
+ *     summary: Get a list of cars
+ *     tags: [Cars]
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description: A list of cars for drivers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/CarResponse'
+ *       400:
+ *         description: Bad Request
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Driver not found 
+ */
+driverRouter.get(
+  "/:driverId/cars",
+  isAuthenticated,
+  driverExists(ParamType.URL_PARAM),
+  isAccountOwner,
+  listCarController
+)
+
+/**
+ * @swagger
+ * api/drivers/{driverId}/cars/:id:
+ *   get:
+ *     summary: Get a car
+ *     tags: [Cars]
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description: A car for driver
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               items:
+ *                 $ref: '#/components/schemas/CarResponse'
+ *       400:
+ *         description: Bad Request
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Driver not found 
+ */
+driverRouter.get(
+  "/:driverId/cars/:id",
+  isAuthenticated,
+  driverExists(ParamType.URL_PARAM),
+  isAccountOwner,
+  retrieveCarController
+)
+
+/**
+ * @swagger
+ * api/drivers/{driverId}/cars/:id:
+ *   delete:
+ *     summary: Delete a car
+ *     tags: [Cars]
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description: Delete a car for driver
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       400:
+ *         description: Bad Request
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Driver not found 
+ */
+driverRouter.delete(
+  "/:driverId/cars/:id",
+  isAuthenticated,
+  isAccountOwner,
+  deleteCarController
+)
+
