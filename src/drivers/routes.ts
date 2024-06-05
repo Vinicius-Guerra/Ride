@@ -2,8 +2,8 @@ import { Router } from "express";
 import { handlePagination, isBodyValid } from "../@shared/middlewares";
 import { carPayloadSchema } from "../cars/schemas";
 import { createCarController } from "../cars/controllers";
-import { createDriverController, listDriverController } from "./controllers";
-import { driverPayloadSchema } from "./schemas";
+import { createDriverController, listDriverController, listOneDriverController, updateDriverController } from "./controllers";
+import { driverPayloadSchema, driverUpdatePayloadSchema } from "./schemas";
 
 
 import { ParamType } from "../@shared/interfaces";
@@ -127,6 +127,58 @@ driverRouter.post("", isBodyValid(driverPayloadSchema), createDriverController);
  */
 driverRouter.get("", handlePagination, listDriverController);
 
+/**
+ * @swagger
+ * api/drivers/:id:
+ *   get:
+ *     summary: Get a one Driver
+ *     tags: [Drivers]
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description: A list one driver
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               items:
+ *                 $ref: '#/components/schemas/DriverResponse'
+ *       400:
+ *         description: Bad Request 
+ *       401:
+ *         description: Token is required.
+ */
+driverRouter.get("/:id", isAuthenticated, listOneDriverController);
+
+/**
+ * @swagger
+ * api/drivers/:id:
+ *   patch:
+ *     summary: Update a driver
+ *     tags: [Drivers]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/DriverUpdatePayload'
+ *     responses:
+ *       201:
+ *         description: Driver update successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DriverResponse'
+ *       400:
+ *         description: Invalid Driver Id
+ *       401:
+ *         description: Token is required.
+ *       403:
+ *         description: User is not the owner of this driver
+ *       404:
+ *         description: Driver not found
+ */
+driverRouter.patch("/:id", isAuthenticated, isAccountOwner, isBodyValid(driverUpdatePayloadSchema), updateDriverController);
 
 /**
  * @swagger
