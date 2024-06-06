@@ -4,7 +4,8 @@ import { hash } from "bcryptjs";
 import { prisma } from "./database";
 import { DriverFactory } from "../src/drivers/__tests__/factories";
 import { CustomerFactory } from "../src/customers/__tests__/factories";
-import { PaymentFactory } from "../../payments/__tests__/factories";
+import { PaymentFactory } from "../src/payments/__tests__/factories";
+
 
 async function resetDatabase() {
   await prisma.trip.deleteMany();
@@ -44,55 +45,55 @@ async function main() {
     customers.push(customer);
   }
 
-  // IN_PROGRESS TRIPS
-  const tripsInProgress = [];
-  for (let i = 0; i < TRIPS_IN_PROGRESS; i++) {
-    const payment = await PaymentFactory.create();
+//   // IN_PROGRESS TRIPS
+//   const tripsInProgress = [];
+//   for (let i = 0; i < TRIPS_IN_PROGRESS; i++) {
+//     const payment = await PaymentFactory.create();
 
-    const tripRelationships = {
-      driverId: drivers[i].id,
-      customerId: customers[i].id,
-      paymentId: payment.id,
-    };
+//     const tripRelationships = {
+//       driverId: drivers[i].id,
+//       customerId: customers[i].id,
+//       paymentId: payment.id,
+//     };
 
-    const tripInProgress = await TripFactory.create(tripRelationships);
-    tripsInProgress.push(tripInProgress);
-  }
+//     const tripInProgress = await TripFactory.create(tripRelationships);
+//     tripsInProgress.push(tripInProgress);
+//   }
 
-  const fromDatetime = new Date();
-  const toDatetime = new Date(
-    fromDatetime.getTime() + MAX_FUTURE_HOURS_UPDATED_AT * 60 * 60 * 1000
-  );
+//   const fromDatetime = new Date();
+//   const toDatetime = new Date(
+//     fromDatetime.getTime() + MAX_FUTURE_HOURS_UPDATED_AT * 60 * 60 * 1000
+//   );
 
-  // COMPLETED TRIPS
-  const tripsCompleted = [];
-  for (let i = 0; i < TRIPS_COMPLETED; i++) {
-    const driverRandomIndex = Math.floor(Math.random() * DRIVER_AMOUNT);
-    const customerRandomIndex = Math.floor(Math.random() * CUSTOMER_AMOUNT);
+//   // COMPLETED TRIPS
+//   const tripsCompleted = [];
+//   for (let i = 0; i < TRIPS_COMPLETED; i++) {
+//     const driverRandomIndex = Math.floor(Math.random() * DRIVER_AMOUNT);
+//     const customerRandomIndex = Math.floor(Math.random() * CUSTOMER_AMOUNT);
 
-    const randomDriver = drivers[driverRandomIndex];
-    const randomCustomer = customers[customerRandomIndex];
+//     const randomDriver = drivers[driverRandomIndex];
+//     const randomCustomer = customers[customerRandomIndex];
 
-    const payment = await PaymentFactory.create();
+//     const payment = await PaymentFactory.create();
 
-    const tripRelationships = {
-      driverId: randomDriver.id,
-      customerId: randomCustomer.id,
-      paymentId: payment.id,
-    };
+//     const tripRelationships = {
+//       driverId: randomDriver.id,
+//       customerId: randomCustomer.id,
+//       paymentId: payment.id,
+//     };
 
-    const tripCompleted = await TripFactory.create(tripRelationships, {
-      status: TripStatus.COMPLETED,
-      updatedAt: faker.date.between({ from: fromDatetime, to: toDatetime }),
-    });
-    tripsCompleted.push(tripCompleted);
-  }
+//     const tripCompleted = await TripFactory.create(tripRelationships, {
+//       status: TripStatus.COMPLETED,
+//       updatedAt: faker.date.between({ from: fromDatetime, to: toDatetime }),
+//     });
+//     tripsCompleted.push(tripCompleted);
+//   }
 
-  console.log(drivers[0]);
-  console.log(customers[0]);
-  console.log(tripsInProgress[0]);
-  console.log(tripsCompleted[0]);
-}
+//   console.log(drivers[0]);
+//   console.log(customers[0]);
+//   console.log(tripsInProgress[0]);
+//   console.log(tripsCompleted[0]);
+// }
 
 main()
   .then(async () => {
@@ -102,4 +103,5 @@ main()
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);
-  });
+  })
+}

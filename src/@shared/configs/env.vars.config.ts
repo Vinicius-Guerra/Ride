@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { logger } from "../loggers/winston.logger.ts";
-import { logLevelKeys } from "../loggers/winston.logger.ts";
+import { logLevelKeys, logger } from "../loggers/winston.logger";
 
 enum AppEnv {
   developmnet = "DEV",
