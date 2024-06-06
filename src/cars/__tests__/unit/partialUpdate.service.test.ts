@@ -1,7 +1,7 @@
 import { Driver } from "@prisma/client";
-import { prisma } from "../../../@shared/database/database";
 import { partialUpdateCarService } from "../../services";
 import { DriverFactory } from "../../../drivers/__tests__/factories";
+import { prisma } from "../../../../prisma/database";
 
 describe("Car service partial update unit tests", () => {
   let driver1: Driver;

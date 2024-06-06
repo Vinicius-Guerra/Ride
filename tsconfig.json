@@ -6,11 +6,18 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "noEmit": true,
+    "rootDir": "./",  // Inclui todos os arquivos a partir da raiz do projeto
+    "outDir": "./dist",  // Diretório de saída para os arquivos compilados
+    "noEmit": false,  // Permite a emissão de arquivos compilados
     "allowImportingTsExtensions": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*",
+    "prisma/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".env",
+    ".env.test"
+  ]
 }

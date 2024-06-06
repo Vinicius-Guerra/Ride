@@ -1,9 +1,9 @@
-import { prisma } from "../../../@shared/database/database";
 import supertest from "supertest";
 import { app } from "../../../app";
 import { DriverPayload } from "../../../drivers/interfaces";
 import { hash } from "bcryptjs";
 import { DriverFactory } from "../../../drivers/__tests__/factories";
+import { prisma } from "../../../../prisma/database";
 
 describe("POST /login", () => {
   const request = supertest(app);

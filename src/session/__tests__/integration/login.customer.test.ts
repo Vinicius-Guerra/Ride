@@ -1,9 +1,9 @@
-import { prisma } from "../../../@shared/database/database";
 import supertest from "supertest";
 import { app } from "../../../app";
 import { hash } from "bcryptjs";
 import { CustomerPayload } from "../../../customers/interfaces";
 import { CustomerFactory } from "../../../customers/__tests__/factories";
+import { prisma } from "../../../../prisma/database";
 
 describe("POST /login/customer", () => {
   const request = supertest(app);
